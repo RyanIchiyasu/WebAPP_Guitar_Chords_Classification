@@ -1,0 +1,36 @@
+<!-- 親テンプレートを読み込む-->
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="mt-5 text-center">
+      <div class="alert alert-primary alert-dismissible" role="alert">
+        <p style="margin-bottom:1em;"><h3><b>How to use Guiatr Chords Classification</b></h3></p>
+        <hr>
+        <h4>
+          <ol>
+            <li style="margin-bottom:1em;" align="left">Upload JPF file and press 'Judge' button.</li>
+            <li style="margin-bottom:1em;" align="left">AI analyzes the picture that you uploaded, then it shows which chords it is.(C Dm Em F G Am Bm)</li>
+            <li style="margin-bottom:1em;" align="left">You can upload multiple pictures at the same time.</li>
+          </ol>
+        </h4>
+      </div>
+    </div>
+    <hr>
+    <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data">
+      <div style="display:inline-flex">
+        <input type="file" name="files[]" multiple>
+      </div>
+      <input type="submit" class="btn btn-lg btn-danger" value="Judge">
+      {% csrf_token %}
+    </form>
+
+    {% if message %}
+    <div class="alert alert-danger" role="alert">
+      <h4><font color="red">{{message}}<br></font> </h4>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
