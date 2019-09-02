@@ -8,4 +8,4 @@ As a future, it's nesessary to be improved its availability and flexibility. But
 <img src="https://github.com/RyunosukeIchiyasu/WebAPP_Guitar_Chords_Classification/blob/master/pics/index.jpg" width="600">
 
 ## Result page
-<img src="https://github.com/RyunosukeIchiyasu/WebAPP_Guitar_Chords_Classification/blob/master/pics/result.jpg" width="600">
+<img src="https://github.com/RyunosukeIchiyasu/WebAPP_Guitar_Chords_Classification/blob/master/pics/result2.jpg" width="600">
