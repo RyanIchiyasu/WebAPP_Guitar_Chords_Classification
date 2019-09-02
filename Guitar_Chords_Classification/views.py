@@ -23,8 +23,8 @@ graph = tf.get_default_graph()
 def GuitarChords(image):
     with graph.as_default():
         preds = model.predict(image)
-        pred_argmax = np.argmax(preds[0])
-        return pred_argmax
+        #pred_argmax = np.argmax(preds[0])
+        return preds[0]
 
 def upload(request):
 
@@ -41,7 +41,9 @@ def upload(request):
 
     if request.method == 'POST' and files:
         result = []
-        labels = []
+        chord_list = []
+        preds_list = []
+
         for file in files:
             image = Image.open(file)
             image = image.resize((150, 150))
@@ -50,28 +52,37 @@ def upload(request):
             image = image / 255
             image = np.expand_dims(image, axis=0)
             preds = GuitarChords(image)
-            if preds == 0:
-                chord = 'C'
-            elif preds == 1:
-                chord = 'Dm'
-            elif preds == 2:
-                chord = 'Em'
-            elif preds == 3:
-                chord = 'F'
-            elif preds == 4:
-                chord = 'G'
-            elif preds == 5:
-                chord = 'Am'
-            elif preds == 6:
-                chord = 'Bm'
-            labels.append(chord)
 
-        for file, label in zip(files, labels):
+            pred_argmax = np.argmax(preds)
+            if pred_argmax == 0:
+                chord = 'C'
+            elif pred_argmax == 1:
+                chord = 'Dm'
+            elif pred_argmax == 2:
+                chord = 'Em'
+            elif pred_argmax == 3:
+                chord = 'F'
+            elif pred_argmax == 4:
+                chord = 'G'
+            elif pred_argmax == 5:
+                chord = 'Am'
+            elif pred_argmax == 6:
+                chord = 'Bm'
+
+            chord_list.append(chord)
+
+            preds = preds * 100
+            preds = np.round(preds, 1)
+            print(preds)
+
+            preds_list.append(preds)
+
+        for file, chord, preds in zip(files, chord_list, preds_list):
             file.seek(0)
             file_name = file
             src = base64.b64encode(file.read())
             src = str(src)[2:-1]
-            result.append((src, label))
+            result.append((src, chord, preds))
 
         context = {
                 'result' : result

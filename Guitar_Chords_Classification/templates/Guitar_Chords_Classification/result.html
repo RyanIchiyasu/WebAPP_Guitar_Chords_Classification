@@ -8,16 +8,85 @@
       <div class="card-header">
         <h2><b>Guitar Chords Classification</b></h2></div>
         <div class="card-body">
-          <div class="mt-5 text-center">
+          <div class="text-center">
             <div class="alert alert-primary alert-dismissible" role="alert">
               <h3 class=""><b>Judge result</b></h3>
               <hr>
-              <div class="mt-5 text-center">
+              <div class="text-center">
                 {% for data in result %}
                 <div class="alert alert-warning">
+                  <div>
                   <img src="data:image/jpg;base64,{{data.0}}" width="72" height="72" />
-                  <p class="lead">【Detected chord by AI】<br>The chord is <font color=red><b>{{ data.1 }}</font></b></p>
-                </div>
+                  <p class="lead">【Detected chord by AI】
+                    <br>This chord is <font color=red><b>{{ data.1 }}</font></b>
+                  </p>
+                  </div>
+                  <div class='w-20 h-50 mx-auto'>
+                  <canvas id="canvas"></canvas>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+                  <script>
+                      var ctx = document.getElementById("canvas").getContext("2d");
+                      var myBar = new Chart(ctx, {
+                          type: 'bar',                           //◆棒グラフ
+                          data: {                                //◆データ
+                              labels: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bm'],     //ラベル名
+                              datasets: [{                       //データ設定
+                                  data: [{{data.2.0}}, {{data.2.1}}, {{data.2.2}}, {{data.2.3}}, {{data.2.4}}, {{data.2.5}}, {{data.2.6}}],          //データ内容
+                                  backgroundColor: ['#E6B0AA', '#D7BDE2', '#A3E4D7', '#A9CCE3', '#F9E79F', '#A9DFBF', '#EDBB99']   //背景色
+                              }]
+                          },
+                          options: {                             //◆オプション
+                              responsive: true,                  //グラフ自動設定
+                              legend: {                          //凡例設定
+                                  display: false                 //表示設定
+                             },
+                              title: {                           //タイトル設定
+                                  display: true,                 //表示設定
+                                  // fontSize: 18,                  //フォントサイズ
+                                  text: 'Analysis result'                //ラベル
+                              },
+                              scales: {                          //軸設定
+                                  yAxes: [{                      //y軸設定
+                                      display: true,             //表示設定
+                                      scaleLabel: {              //軸ラベル設定
+                                         display: true,          //表示設定
+                                         labelString: 'probability[%]',  //ラベル
+                                         // fontSize: 18               //フォントサイズ
+                                      },
+                                      ticks: {                      //最大値最小値設定
+                                          min: 0,                   //最小値
+                                          max: 100,                  //最大値
+                                          // fontSize: 10,             //フォントサイズ
+                                          stepSize: 25               //軸間隔
+                                      },
+                                  }],
+                                  xAxes: [{                         //x軸設定
+                                      display: true,                //表示設定
+                                      barPercentage: 0.7,           //棒グラフ幅
+                                      categoryPercentage: 0.4,      //棒グラフ幅
+                                      scaleLabel: {                 //軸ラベル設定
+                                         display: true,             //表示設定
+                                         labelString: 'chords',  //ラベル
+                                         // fontSize: 18               //フォントサイズ
+                                      },
+                                      ticks: {
+                                          // fontSize: 18             //フォントサイズ
+                                      },
+                                  }],
+                              },
+                              layout: {                             //レイアウト
+                                  // padding: {                          //余白設定
+                                  //     left: 100,
+                                  //     right: 50,
+                                  //     top: 0,
+                                  //     bottom: 0
+                                  // }
+                              }
+                          }
+                      });
+                      </script>
+                  </div>
+                  </div>
                 {% endfor %}
                 <a class="btn btn-lg btn-secondary"  href="{% url 'index' %}">Back to home</a>
               </div>
